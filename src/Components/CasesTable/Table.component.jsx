@@ -1,10 +1,32 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import './Table.css'
+import axios from 'axios'
+import { sortingData } from '../../Utils/utils'
+
 
 const Table = () => {
 
+    const [tableData,SetTableData] = useState([]);
+
+    useEffect(()=>{
+        axios.get('https://disease.sh/v3/covid-19/countries',{ crossdomain: true })
+              .then(({data}) => {
+                  let newData = sortingData(data);
+                  SetTableData(newData)
+              }).catch(err => console.log(`Error at table API, ${err}`));
+    },[])
+
     return (
-        <h1>I am right table</h1>
+       <div className="table">
+           {
+               tableData.map(({country,cases}) => (
+                   <tr>
+                       <td>{country}</td>
+                       <td>{cases}</td>
+                   </tr>
+               ))
+           }
+       </div>
     )
 }
 

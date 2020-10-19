@@ -1,11 +1,29 @@
 import React from 'react'
-import './Map.css'
+import './map.css'
+import {Map as LeafletMap,TileLayer} from 'react-leaflet'
+import {showDataOnMap} from '../../Utils/utils'
+import { useStateValue } from '../../Hooks/state'
 
-const Map = () => {
+const MapInfo = () => {
 
-    return (
-        <h1>I am Map</h1>
+    const [{mapCenter,mapData,caseType}] = useStateValue();
+
+    console.log(caseType);
+
+    return(
+        <div className="map">
+            <LeafletMap center={mapCenter.center} zoom={mapCenter.zoom}>
+                <TileLayer  
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                />
+                 {showDataOnMap(mapData,caseType)}
+            </LeafletMap>
+
+            {/* loop throught the countries and draw the circles */}
+           
+        </div>
     )
 }
 
-export default Map
+export default MapInfo

@@ -4,18 +4,21 @@ import Table from './Components/CasesTable/Table.component'
 import LineGraph from './Components/Charts/LineGraph/line.component'
 import Header from './Components/Header/Header.component'
 import CaseInfo from './Components/Information/info.component'
-import Map from './Components/Map/Map.component'
+import MapInfo from './Components/Map/Map.component'
 
-import {Switch,Route} from 'react-router-dom'
+import {Switch,Route,Redirect} from 'react-router-dom'
 import Vaccine from './Components/Vaccine/Vaccine.component'
 import About from './Components/About/About.component'
-import Footer from './Components/Footer/Footer.component'
+import { CardContent } from '@material-ui/core'
+
+import "leaflet/dist/leaflet.css";
 
 const App = () => {
 
   return (
     <div className="app">
       <Switch>
+      <Redirect exact from='/' to='/country' />
           {/* left panel */}
           <div className='app__left'>
 
@@ -23,28 +26,32 @@ const App = () => {
                 <Header/>
               </div>
 
-              <div className="app__stats">
+              <div >
                 <Route exact path={['/','/country','/state']} component={CaseInfo}/>
               </div>
 
               <div className="app__map">
-                <Route exact path={['/','/country','/state']} component={Map}/>
+                <Route exact path={['/','/country','/state']} component={MapInfo}/>
                 <Route exact path='/vaccine' component={Vaccine} />
                 <Route exact path='/about' component={About} />
               </div>
-
           </div>
+          
       </Switch>
       {/* right panel */}
-      <div className="app__right">
+      <CardContent className="app__right">
+      <h2>Live Cases by Country</h2>
         <Table/>
         <br/>
-        <LineGraph/>
-      </div>
+        <h2>WorldWide new Cases</h2>
+        <LineGraph className="app__graph"/>
+     
+      </CardContent>
 
-      <div className="app__bottom">
+      {/* <div className="app__bottom">
+        <br/>
         <Footer/>
-      </div>
+      </div> */}
     </div>
   )
 }

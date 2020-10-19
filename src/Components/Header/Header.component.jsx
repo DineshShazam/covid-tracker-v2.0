@@ -5,6 +5,7 @@ import logo from './logo.ico'
 import axios from 'axios'
 
 import {FormControl,Select,MenuItem} from '@material-ui/core'
+import { useStateValue } from '../../Hooks/state'
 
 const Header = ({location}) => {
 
@@ -23,10 +24,18 @@ const Header = ({location}) => {
     // set state
     const [stateValue,setStateValue] = useState('State');
 
+
+    // state
+    const [state,dispatch] = useStateValue();
+
     useEffect(() => {
 
         // countries dropdown
         axios.get('https://disease.sh/v3/covid-19/countries').then(({data}) => {
+            dispatch({
+                type:'ADD_MAP_DATA',
+                payload:data
+            })
             const country = data.map(({country,countryInfo}) => ({
                 name:country,
                 value:countryInfo.iso2
@@ -36,6 +45,7 @@ const Header = ({location}) => {
         }).catch(err => console.log(`error at get countries dropdown, ${err}`));
     },[])
 
+    // countries dropdown 
     useEffect(() => {
         axios.get('https://disease.sh/v3/covid-19/gov/').then(({data}) => {
             console.log(data);
@@ -49,35 +59,59 @@ const Header = ({location}) => {
         const value = e.target.value;
         setCountry(value);
         
-        // send the data to the state
+        // send the data to the stateManagement
+        dispatch({
+            type:'ADD_COUNTRY_DATA',
+            payload:value
+        })
         
     }
 
+    // state change
     const govCountryChange = (e) => {
         const value = e.target.value
         console.log(value);
         setGovCountry(value);
-        
 
-        if(value === 'Countries')
-        {
-            // show please select the countries
-        } else if(value === 'India') {
-            axios.get(`https://disease.sh/v3/covid-19/gov/${value}`).then(({data}) => {
-                const {states} = data
-                console.log(states);
-                setGovState(states);
-            }).catch(err => console.log(`error at state countries, ${err}`));
+        if(value === 'Countries') {
+            alert('please select the countries');
+            
         } else {
-            alert('Data available only for India');
-            setGovCountry('Countries')
+            axios.get(`https://disease.sh/v3/covid-19/gov/${value}`).then(({data}) => {
+                console.log(data);
+                dispatch({
+                    type:'ADD_INFO_CASES',
+                    payload: data
+                })
+
+                // if(value === 'India') {
+                //     const {states} = data;
+                //     setGovState(states);
+                // } else {
+                //     setGovState(data);
+                // }
+
+                setGovState(data);
+               
+                // send the state data to Reducer
+                dispatch({
+                    type:'ADD_GOVCOUNTRY_DATA',
+                    payload:value
+                })
+            }).catch(err => console.log(`error at gov change API, ${err}`))
         }
     }
 
     const govStateChange = (e) => {
         const value = e.target.value;
         setStateValue(value);
+        dispatch({ 
+            type:'ADD_STATE_DATA', 
+            payload:value 
+        })
     }
+
+
     return (
         <div>
         <div className="nav-bar">
@@ -145,7 +179,7 @@ const Header = ({location}) => {
                 <Select variant='outlined' value={govCountry} onChange={govCountryChange}>
                     <MenuItem value="Countries">Countries</MenuItem>
                     {
-                        govCountries.map((value) => (
+                        govCountries?.map((value) => (
                             <MenuItem value={value}>{value}</MenuItem>
                         ))
                     }
@@ -154,9 +188,16 @@ const Header = ({location}) => {
                 <Select variant='outlined' value={stateValue} onChange={govStateChange}>
                     <MenuItem value="State">State</MenuItem>
                     {
-                        govState.map(({state}) => (
-                            <MenuItem value={state}>{state}</MenuItem>
-                        ))
+
+                        govCountry === 'India' ? (
+                                govState?.map(({state}) => (
+                                    <MenuItem value={state}>{state}</MenuItem>
+                                ))
+                        ) : (
+                                govState?.map(({province}) => (
+                                    <MenuItem value={province}>{province}</MenuItem>
+                                ))
+                        )
                     }
                 </Select>
             </FormControl>)
