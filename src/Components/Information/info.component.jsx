@@ -37,30 +37,28 @@ const CaseInfo = ({location}) => {
     // GovCountries dropdown
     useEffect(() => {
         // send the gov countries to the reducer
-        const {total} = infoCases;
-        console.log(total);
+        const {total} = infoCases; 
         setStateInfo(total);
     },[GovCountry])
 
     // state dropdown
     useEffect(() => {
 
-        if(GovState === 'India') {
+        // if(GovCountry === 'India') {
             const {states} = infoCases;
-            console.log(states);
             const value = states?.find(data => data.state === GovState);
             setStateInfo(value);
-        } else {
-            const value = infoCases?.find(data => data.province === GovState);
-            console.log(value);
-            setStateInfo(value);
-        }
-        
+        // } else {
+        //      const {provinces} = infoCases;
+        //     // const value = infoCases?.find(data => data.province === GovState);
+        //     // console.log(value);
+        //     // setStateInfo(value);
+        // }
+
     },[GovState])
 
     // send the caseType to the reducer
-    const caseTypes = (value) => {
-        console.log(value);
+    const caseTypes = (value) => { 
         dispatch({
             type:'ADD_CASE_TYPE',
             payload:value

@@ -58,10 +58,9 @@ const LineGraph = ({...props}) => {
     useEffect(() => {
         axios.get('https://disease.sh/v3/covid-19/historical/all?lastdays=30')
              .then(({data}) => {
-                 console.log(data);
                  SetValue(data);
                 let newData = lineData(caseType,data);
-                console.log(newData);
+  
                 SetValue(newData);
              }).catch(err => console.log(`Error at Graph, ${err}`));
     },[caseType])

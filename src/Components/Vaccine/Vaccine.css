@@ -1,0 +1,43 @@
+.vaccine {
+    height: 500px;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 20px;
+    margin-top: 16px;
+    box-shadow: 0 0 8px -4px rgb(0, 0, 0,0.5);
+  }
+  
+  table, th, td {
+    /* border-bottom: 1px solid #ddd; */
+ border-collapse: collapse;
+ 
+}
+
+ th {
+    text-align: left;
+    padding: 5px;
+}
+ td {
+ padding: 5px;
+ /* text-align: left; */
+ text-align:center;
+}
+
+.gfg {
+    border-collapse:separate; 
+    border-spacing:0 15px;  
+}
+
+/* tr:nth-child(even) {background-color: #f2f2f2;} */
+
+.vertical { 
+           border-left: 2px solid black; 
+           height: 100px; 
+           position:absolute; 
+           left: 20%; 
+       }
+
+.vaccine__info{
+    display: flex;
+    justify-content: space-around;
+}

@@ -6,7 +6,9 @@ export const initialState = {
     mapCenter : {center :{ lat: 34.80746, lng: -40.4796 }, zoom : 2},
     mapData: [],
     tableData: [],
-    caseType:'cases'
+    caseType:'cases',
+    vaccineData:[],
+    vaccineCandidates:''
 }
 
 const reducer = (state,action) => {
@@ -53,6 +55,17 @@ const reducer = (state,action) => {
             return {
                 ...state,
                 caseType:action.payload
+            }
+        // vaccine Page
+        case 'ADD_VACCINE_DATA' :
+            return {
+                ...state,
+                vaccineData:action.payload
+            }
+        case 'ADD_VACCINE_CANDIDATES' :
+            return {
+                ...state,
+                vaccineCandidates:action.payload
             }
         default :
             return state

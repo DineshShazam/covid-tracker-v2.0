@@ -8,8 +8,6 @@ const MapInfo = () => {
 
     const [{mapCenter,mapData,caseType}] = useStateValue();
 
-    console.log(caseType);
-
     return(
         <div className="map">
             <LeafletMap center={mapCenter.center} zoom={mapCenter.zoom}>

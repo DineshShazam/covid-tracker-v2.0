@@ -24,14 +24,35 @@ const Header = ({location}) => {
     // set state
     const [stateValue,setStateValue] = useState('State');
 
+    // vaccine dropdown
+    const [candidates,SetCandidates] = useState([]);
+    // set value in vaccine
+    const [canValue,SetCanValue] = useState('Choose Medicines');
 
     // state
     const [state,dispatch] = useStateValue();
 
+    const routes = location.pathname
+
+    useEffect(() => {
+        if(routes === '/country') {
+            dispatch({
+                type:'ADD_MAP_LOCATION',
+                payload : {center :{ lat: 34.80746, lng: -40.4796 }, zoom : 2} 
+            })
+        } else if(routes === '/state') {
+            dispatch({
+                type:'ADD_MAP_LOCATION',
+                payload : {center :{ lat: 34.80746, lng: -40.4796 }, zoom : 2} 
+            })
+        }
+    },[routes])
+
+    // worldwide dropdown
     useEffect(() => {
 
         // countries dropdown
-        axios.get('https://disease.sh/v3/covid-19/countries').then(({data}) => {
+        axios.get('https://disease.sh/v3/covid-19/countries',{crossdomain: true}).then(({data}) => {
             dispatch({
                 type:'ADD_MAP_DATA',
                 payload:data
@@ -40,19 +61,8 @@ const Header = ({location}) => {
                 name:country,
                 value:countryInfo.iso2
             }))
-            console.log(country)
             setCountries(country)
         }).catch(err => console.log(`error at get countries dropdown, ${err}`));
-    },[])
-
-    // countries dropdown 
-    useEffect(() => {
-        axios.get('https://disease.sh/v3/covid-19/gov/').then(({data}) => {
-            console.log(data);
-            setGovCountries(data);
-        }).catch((err) => {
-            console.log(`error at government countries, ${err}`);
-        })
     },[])
 
     const countryChange = (e) => {
@@ -67,32 +77,41 @@ const Header = ({location}) => {
         
     }
 
+    // countries dropdown 
+    useEffect(() => {
+        axios.get('https://disease.sh/v3/covid-19/gov/',{crossdomain: true}).then(({data}) => {
+            const value = data.filter((val) => val === 'India'); 
+            setGovCountries(value);
+        }).catch((err) => {
+            console.log(`error at government countries, ${err}`);
+        })
+    },[])
+
+
     // state change
     const govCountryChange = (e) => {
         const value = e.target.value
-        console.log(value);
         setGovCountry(value);
-
         if(value === 'Countries') {
             alert('please select the countries');
             
         } else {
-            axios.get(`https://disease.sh/v3/covid-19/gov/${value}`).then(({data}) => {
-                console.log(data);
+            axios.get(`https://disease.sh/v3/covid-19/gov/${value}`,{crossdomain: true}).then(({data}) => {
+                
                 dispatch({
                     type:'ADD_INFO_CASES',
                     payload: data
                 })
-
-                // if(value === 'India') {
-                //     const {states} = data;
-                //     setGovState(states);
-                // } else {
-                //     setGovState(data);
-                // }
-
-                setGovState(data);
-               
+                if(value === 'India') {
+                    dispatch({  
+                        type: 'ADD_MAP_LOCATION',
+                        payload: {center:{ lat: 20,lng: 77,}, zoom:4}
+                    })
+                    const {states} = data;
+                    setGovState(states);
+                } else {
+                    setGovState(data);
+                }
                 // send the state data to Reducer
                 dispatch({
                     type:'ADD_GOVCOUNTRY_DATA',
@@ -111,6 +130,30 @@ const Header = ({location}) => {
         })
     }
 
+    // vaccine dropdown
+    useEffect(() => {
+        axios.get('https://disease.sh/v3/covid-19/vaccine').then(({data}) => {
+           const temp = data.data;
+           const vaccineData = temp.filter((val) => val.candidate !== 'No name announced');
+           dispatch({
+               type:'ADD_VACCINE_DATA',
+               payload: vaccineData
+           })
+           const dropdownvalue = temp.filter((val) => val.candidate !== 'No name announced').map(({candidate}) => ({
+                candidates : candidate
+           }));
+           SetCandidates(dropdownvalue);
+        }).catch(err => console.log(`Api error at vaccine, ${err}`));
+    },[])
+
+    const vaccineChange = (e) => {
+        const value = e.target.value;
+        SetCanValue(value);
+        dispatch({
+            type:'ADD_VACCINE_CANDIDATES',
+            payload: value
+        })
+    }
 
     return (
         <div>
@@ -201,6 +244,20 @@ const Header = ({location}) => {
                     }
                 </Select>
             </FormControl>)
+            :
+            location.pathname === '/vaccine' ? 
+            (
+               <FormControl className='app__dropdown'>
+                   <Select variant='outlined' value={canValue} onChange={vaccineChange}>
+                       <MenuItem value='Choose Medicines'>Choose Medicines</MenuItem>
+                       {
+                           candidates.map(({candidates}) => (
+                               <MenuItem value={candidates}>{candidates}</MenuItem>
+                           ))
+                       }
+                   </Select>
+               </FormControl>
+            ) 
             :
             <div></div>
         }

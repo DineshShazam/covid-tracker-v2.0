@@ -12,10 +12,12 @@ import About from './Components/About/About.component'
 import { CardContent } from '@material-ui/core'
 
 import "leaflet/dist/leaflet.css";
+// import Footer from './Components/Footer/Footer.component'
 
 const App = () => {
 
   return (
+    // <React.Fragment>
     <div className="app">
       <Switch>
       <Redirect exact from='/' to='/country' />
@@ -48,11 +50,9 @@ const App = () => {
      
       </CardContent>
 
-      {/* <div className="app__bottom">
-        <br/>
-        <Footer/>
-      </div> */}
     </div>
+    // <Footer/>
+    // </React.Fragment>
   )
 }
 
