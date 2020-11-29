@@ -1,5 +1,5 @@
 .vaccine {
-    height: 500px;
+    /* height: 500px; */
     background-color: white;
     padding: 1rem;
     border-radius: 20px;
@@ -7,6 +7,15 @@
     box-shadow: 0 0 8px -4px rgb(0, 0, 0,0.5);
   }
   
+  table {
+    border-collapse:collapse; 
+    table-layout:fixed;
+  }
+
+  table td {
+    word-wrap:break-word;
+  }
+
   table, th, td {
     /* border-bottom: 1px solid #ddd; */
  border-collapse: collapse;

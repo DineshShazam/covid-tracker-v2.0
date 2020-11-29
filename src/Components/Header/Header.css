@@ -1,6 +1,7 @@
 .nav-bar {
     height: 82px;
-    width: 1043px;
+    min-width: 900px;
+    max-width: 900px;
     background: #262626;
   }
    

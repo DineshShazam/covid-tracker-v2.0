@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import './Header.css'
 import {NavLink,withRouter} from 'react-router-dom'
-import logo from './logo.ico'
+import logo from './logo1.ico'
 import axios from 'axios'
 
 import {FormControl,Select,MenuItem} from '@material-ui/core'
@@ -178,7 +178,7 @@ const Header = ({location}) => {
                     exact
                     activeClassName='navbar--active'
                     to='/state'
-                    >state
+                    >State
                 </NavLink>
               </li>
               <li>
@@ -186,16 +186,16 @@ const Header = ({location}) => {
                         exact
                         activeClassName='navbar--active'
                         to='/vaccine'
-                        >vaccine
+                        >Vaccine
                     </NavLink>
               </li>
               <li>
-                    <NavLink 
+                    {/* <NavLink 
                         exact
                         activeClassName='navbar--active'
                         to='/about'
                         >About
-                    </NavLink>
+                    </NavLink> */}
               </li>
             </ul>
           </nav>

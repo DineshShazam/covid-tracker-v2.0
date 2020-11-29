@@ -1,4 +1,5 @@
 import React,{useEffect,useState} from 'react'
+import numeral from 'numeral'
 import './Table.css'
 import axios from 'axios'
 import { sortingData } from '../../Utils/utils'
@@ -19,10 +20,10 @@ const Table = () => {
     return (
        <div className="table">
            {
-               tableData.map(({country,cases}) => (
+               tableData?.map(({country,cases}) => (
                    <tr>
                        <td>{country}</td>
-                       <td>{cases}</td>
+                       <td>{numeral(cases).format("0,0")}</td>
                    </tr>
                ))
            }

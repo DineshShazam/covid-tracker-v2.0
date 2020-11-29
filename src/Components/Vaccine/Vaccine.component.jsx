@@ -44,7 +44,7 @@ const Vaccine = () => {
                 </tr>
                 <tr>
                     <th>Details:</th>
-                    <td>{details?.details}</td>
+                    <td><p>{details?.details}</p></td>
                 </tr>
         </table>
         </div>
